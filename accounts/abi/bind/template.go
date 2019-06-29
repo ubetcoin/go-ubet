@@ -463,7 +463,7 @@ const tmplSourceJava = `
 
 package {{.Package}};
 
-import org.ethereum.geth.*;
+import org.ethereum.gubet.*;
 
 {{range $contract := .Contracts}}
 public class {{.Type}} {
@@ -476,10 +476,10 @@ public class {{.Type}} {
 
 	// deploy deploys a new Ethereum contract, binding an instance of {{.Type}} to it.
 	public static {{.Type}} deploy(TransactOpts auth, EthereumClient client{{range .Constructor.Inputs}}, {{bindtype .Type}} {{.Name}}{{end}}) throws Exception {
-		Interfaces args = Geth.newInterfaces({{(len .Constructor.Inputs)}});
-		{{range $index, $element := .Constructor.Inputs}}Interface arg{{$index}} = Geth.newInterface();arg{{$index}}.set{{namedtype (bindtype .Type) .Type}}({{.Name}});args.set({{$index}},arg{{$index}});
+		Interfaces args = Gubet.newInterfaces({{(len .Constructor.Inputs)}});
+		{{range $index, $element := .Constructor.Inputs}}Interface arg{{$index}} = Gubet.newInterface();arg{{$index}}.set{{namedtype (bindtype .Type) .Type}}({{.Name}});args.set({{$index}},arg{{$index}});
 		{{end}}
-		return new {{.Type}}(Geth.deployContract(auth, ABI, Geth.decodeFromHex(BYTECODE), client, args));
+		return new {{.Type}}(Gubet.deployContract(auth, ABI, Gubet.decodeFromHex(BYTECODE), client, args));
 	}
 
 	// Internal constructor used by contract deployment.
@@ -501,7 +501,7 @@ public class {{.Type}} {
 
 	// Creates a new instance of {{.Type}}, bound to a specific deployed contract.
 	public {{.Type}}(Address address, EthereumClient client) throws Exception {
-		this(Geth.bindContract(address, ABI, client));
+		this(Gubet.bindContract(address, ABI, client));
 	}
 
 	{{range .Calls}}
@@ -517,16 +517,16 @@ public class {{.Type}} {
 	//
 	// Solidity: {{.Original.String}}
 	public {{if gt (len .Normalized.Outputs) 1}}{{capitalise .Normalized.Name}}Results{{else}}{{range .Normalized.Outputs}}{{bindtype .Type}}{{end}}{{end}} {{.Normalized.Name}}(CallOpts opts{{range .Normalized.Inputs}}, {{bindtype .Type}} {{.Name}}{{end}}) throws Exception {
-		Interfaces args = Geth.newInterfaces({{(len .Normalized.Inputs)}});
-		{{range $index, $item := .Normalized.Inputs}}Interface arg{{$index}} = Geth.newInterface();arg{{$index}}.set{{namedtype (bindtype .Type) .Type}}({{.Name}});args.set({{$index}},arg{{$index}});
+		Interfaces args = Gubet.newInterfaces({{(len .Normalized.Inputs)}});
+		{{range $index, $item := .Normalized.Inputs}}Interface arg{{$index}} = Gubet.newInterface();arg{{$index}}.set{{namedtype (bindtype .Type) .Type}}({{.Name}});args.set({{$index}},arg{{$index}});
 		{{end}}
 
-		Interfaces results = Geth.newInterfaces({{(len .Normalized.Outputs)}});
-		{{range $index, $item := .Normalized.Outputs}}Interface result{{$index}} = Geth.newInterface(); result{{$index}}.setDefault{{namedtype (bindtype .Type) .Type}}(); results.set({{$index}}, result{{$index}});
+		Interfaces results = Gubet.newInterfaces({{(len .Normalized.Outputs)}});
+		{{range $index, $item := .Normalized.Outputs}}Interface result{{$index}} = Gubet.newInterface(); result{{$index}}.setDefault{{namedtype (bindtype .Type) .Type}}(); results.set({{$index}}, result{{$index}});
 		{{end}}
 
 		if (opts == null) {
-			opts = Geth.newCallOpts();
+			opts = Gubet.newCallOpts();
 		}
 		this.Contract.call(opts, results, "{{.Original.Name}}", args);
 		{{if gt (len .Normalized.Outputs) 1}}
@@ -544,8 +544,8 @@ public class {{.Type}} {
 	//
 	// Solidity: {{.Original.String}}
 	public Transaction {{.Normalized.Name}}(TransactOpts opts{{range .Normalized.Inputs}}, {{bindtype .Type}} {{.Name}}{{end}}) throws Exception {
-		Interfaces args = Geth.newInterfaces({{(len .Normalized.Inputs)}});
-		{{range $index, $item := .Normalized.Inputs}}Interface arg{{$index}} = Geth.newInterface();arg{{$index}}.set{{namedtype (bindtype .Type) .Type}}({{.Name}});args.set({{$index}},arg{{$index}});
+		Interfaces args = Gubet.newInterfaces({{(len .Normalized.Inputs)}});
+		{{range $index, $item := .Normalized.Inputs}}Interface arg{{$index}} = Gubet.newInterface();arg{{$index}}.set{{namedtype (bindtype .Type) .Type}}({{.Name}});args.set({{$index}},arg{{$index}});
 		{{end}}
 		return this.Contract.transact(opts, "{{.Original.Name}}"	, args);
 	}

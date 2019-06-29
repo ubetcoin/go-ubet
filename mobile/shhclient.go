@@ -16,7 +16,7 @@
 
 // Contains a wrapper for the Whisper client.
 
-package geth
+package gubet
 
 import (
 	"github.com/ethereum/go-ethereum/whisper/shhclient"
