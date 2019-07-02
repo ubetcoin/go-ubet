@@ -837,7 +837,7 @@ func (w *worker) commitNewWork(interrupt *int32, noempty bool, timestamp int64) 
 	parent := w.chain.CurrentBlock()
 
 	if parent.Time() >= uint64(timestamp) {
-		timestamp = int64(parent.Time() + 1)
+		timestamp = int64(parent.Time() + 60)
 	}
 	// this will ensure we're not going off too far in the future
 	if now := time.Now().Unix(); timestamp > now+1 {
